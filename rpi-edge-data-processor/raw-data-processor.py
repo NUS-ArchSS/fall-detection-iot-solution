@@ -1,59 +1,52 @@
-from bluepy.btle import DefaultDelegate, Peripheral, Scanner, UUID
-import struct
+import asyncio
+from bleak import BleakClient, BleakScanner
 
-BLE_SERVICE_UUID = "YOUR_CUSTOM_UUID"  # Replace with your custom UUID
-ACCEL_CHARACTERISTIC_UUID = "YOUR_ACCEL_UUID"
-MAG_CHARACTERISTIC_UUID = "YOUR_MAG_UUID"
+# Replace these UUIDs with your unique UUIDs
+BLE_SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+ACCEL_CHARACTERISTIC_UUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
 
-class BangleDelegate(DefaultDelegate):
-    def __init__(self):
-        DefaultDelegate.__init__(self)
+def handle_accel_data(sender: int, data: bytearray):
+    accel_values = [float(x) for x in data]
+    print(f"Accelerometer data: x={accel_values[0]}, y={accel_values[1]}, z={accel_values[2]}")
 
-    def handleNotification(self, cHandle, data):
-        if cHandle == accel_char.getHandle():
-            accel_data = struct.unpack('<fff', data)
-            print("Accelerometer data:", accel_data)  # Print accelerometer data
-        elif cHandle == mag_char.getHandle():
-            mag_data = struct.unpack('<fff', data)
-            print("Magnetometer data:", mag_data)  # Print magnetometer data
+async def run(address):
+    async with BleakClient(address) as client:
+        await client.start_notify(ACCEL_CHARACTERISTIC_UUID, handle_accel_data)
+        print("Subscribed to accelerometer notifications.")
+        await asyncio.sleep(30)
+        await client.stop_notify(ACCEL_CHARACTERISTIC_UUID)
+        print("Unsubscribed from accelerometer notifications.")
 
-def discover_bangle_device():
-    scanner = Scanner()
-    devices = scanner.scan(10.0)  # Scan for 10 seconds
+async def get_services_and_characteristics(address):
+    async with BleakClient(address) as client:
+        services = await client.get_services()
+        
+        for service in services:
+            print(f"Service: {service.uuid}")
+            for characteristic in service.characteristics:
+                print(f"  Characteristic: {characteristic.uuid}")
+
+            
+async def discover_bangle():
+    devices = await BleakScanner.discover()
     bangle_device = None
-    for dev in devices:
-        for (adtype, desc, value) in dev.getScanData():
-            if adtype == 9 and value == 'Bangle':
-                bangle_device = dev
-                break
-        if bangle_device:
+
+    for device in devices:
+        if "Bangle.js" in device.name:
+            print(device.metadata)
+            bangle_device = device
             break
-    return bangle_device
 
-bangle_device = discover_bangle_device()
+    if bangle_device:
+        print(f"Found Bangle device: {bangle_device.address}")
+        await get_services_and_characteristics(bangle_device.address)
+        while True:
+            pass
+        # await run(bangle_device.address)
+    else:
+        print("Bangle.js device not found. Make sure it is powered on and advertising.")
 
-if bangle_device:
-    print(f"Found Bangle device: {bangle_device.addr}")
-    bangle_peripheral = Peripheral(bangle_device)
-    bangle_peripheral.setDelegate(BangleDelegate())
+loop = asyncio.get_event_loop()
+loop.run_until_complete(discover_bangle())
 
-    bangle_service = bangle_peripheral.getServiceByUUID(UUID(BLE_SERVICE_UUID))
-    accel_char = bangle_service.getCharacteristics(UUID(ACCEL_CHARACTERISTIC_UUID))[0]
-    mag_char = bangle_service.getCharacteristics(UUID(MAG_CHARACTERISTIC_UUID))[0]
 
-    bangle_peripheral.writeCharacteristic(
-        accel_char.valHandle + 1,
-        struct.pack('<bb', 0x01, 0x00),
-    )
-
-    bangle_peripheral.writeCharacteristic(
-        mag_char.valHandle + 1,
-        struct.pack('<bb', 0x01, 0x00),
-    )
-
-    while True:
-        if bangle_peripheral.waitForNotifications(1.0):
-            continue
-        print("Waiting for notifications...")
-else:
-    print("Bangle device not found.")

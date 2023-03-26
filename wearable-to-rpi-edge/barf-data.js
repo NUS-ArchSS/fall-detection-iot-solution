@@ -1,58 +1,45 @@
+var ACCEL_PERIOD = 1000; // Accelerometer data send period in milliseconds
+
 // Replace these UUIDs with your unique UUIDs
-var BLE_SERVICE_UUID = 'YOUR_CUSTOM_UUID';
-var ACCEL_CHARACTERISTIC_UUID = 'YOUR_ACCEL_UUID';
-var MAG_CHARACTERISTIC_UUID = 'YOUR_MAG_UUID';
+// var BLE_SERVICE_UUID = '00001800-0000-1000-8000-00805f9b34fb';
+var BLE_SERVICE_UUID = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
+var ACCEL_CHARACTERISTIC_UUID = '6e400002-b5a3-f393-e0a9-e50e24dcca9e';
+// var MAG_CHARACTERISTIC_UUID = '3834d159-a357-4fc4-80be-091633d1b3fc';
 
-// Accelerometer characteristic definition
-var accelCharacteristic = new BLECharacteristic({
-  uuid: ACCEL_CHARACTERISTIC_UUID,
-  properties: ['read', 'notify'], // Allow reading and notifications for this characteristic
-  onRead: function () {
-    // Return accelerometer data as an array of 3 float values (x, y, z)
-    return new Float32Array(Bangle.getAccel().values);
-  },
-});
+function getAccelData() {
+  var accel = Bangle.getAccel();
+  return new Float32Array([accel.x, accel.y, accel.z]);
+}
 
-// Magnetometer characteristic definition
-var magCharacteristic = new BLECharacteristic({
-  uuid: MAG_CHARACTERISTIC_UUID,
-  properties: ['read', 'notify'], // Allow reading and notifications for this characteristic
-  onRead: function () {
-    // Return magnetometer data as an array of 3 float values (x, y, z)
-    return new Float32Array(Bangle.getMag().values);
-  },
-});
+function sendAccelData() {
+  if (NRF.getSecurityStatus().connected) {
+    var update = {};
+    update[BLE_SERVICE_UUID] = {};
+    update[BLE_SERVICE_UUID][ACCEL_CHARACTERISTIC_UUID] = getAccelData();
+    NRF.updateServices(update);
+  }
+}
 
-// Custom service definition containing the accelerometer and magnetometer characteristics
-var bangleService = new BLEService({
-  uuid: BLE_SERVICE_UUID,
-  characteristics: [accelCharacteristic, magCharacteristic],
-});
+function onInit() {
+  if (!BLE_SERVICE_UUID || !ACCEL_CHARACTERISTIC_UUID) {
+    console.log('Please replace the UUID placeholders with your generated UUIDs.');
+    return;
+  }
 
-// Enable the Bluetooth on the Bangle.js watch
-Bangle.setBluetooth(true);
+  NRF.setTxPower(4); // Enable Bluetooth by setting the transmission power to a non-zero value (in this case, 4 dBm)
 
-// Remove the default UART service (serial communication) from the watch
-NRF.setServices({}, {uart: false});
+  var services = {};
+  services[BLE_SERVICE_UUID] = {};
+  services[BLE_SERVICE_UUID][ACCEL_CHARACTERISTIC_UUID] = {
+    value: getAccelData(),
+    readable: true,
+    notify: true,
+  };
+  NRF.setServices(services, { uart: false });
 
-// Add custom service to the Bangle.js watch
-NRF.setServices({
-  uuids: [BLE_SERVICE_UUID],
-  primary: true,
-  visible: true,
-  services: [bangleService],
-});
+  Bangle.on('accel', sendAccelData);
 
-// The following lines set up various default BLE services and characteristics,
-// which are not strictly necessary for sending accelerometer and magnetometer data,
-// but can be useful for identifying the Bangle.js watch and its capabilities.
+  Bangle.setAccelOn(true);
+}
 
-NRF.setServices({0x1801: {}}, {uart: false});
-NRF.setServices({0x1800: {0x2A00: {readable: true, value: 'Bangle'}}}, {uart: false});
-NRF.setServices({0x180A: {0x2A29: {readable: true, value: 'Espruino'}}}, {uart: false});
-NRF.setServices({0x180F: {0x2A19: {readable: true, value: [95]}}}, {uart: false});
-NRF.setServices({0x1802: {0x2A06: {readable: true, value: [0]}}}, {uart: false});
-NRF.setServices({0x1805: {0x2A2B: {readable: true, value: [0]}}}, {uart: false});
-NRF.setServices({0x1805: {0x2A0F: {readable: true, value: [0]}}}, {uart: false});
-NRF.setServices({0x1804: {0x2A07: {readable: true, value: [0]}}}, {uart: false});
-NRF.setServices({0x181C: {0x2A9E: {readable: true, value: [0]}}}, {uart: false});
+onInit();
