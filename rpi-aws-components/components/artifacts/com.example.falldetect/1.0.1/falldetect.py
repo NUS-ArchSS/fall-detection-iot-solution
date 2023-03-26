@@ -14,7 +14,7 @@ warnings.filterwarnings('ignore', message='X does not have valid feature names')
 
 
 def do_fall_detection(input_json):
-    model_file = "/home/pi/fall-detection-model/fall_detection_model.pkl"
+    model_file = "/home/pi/fall-detection-iot-solution/algo-model/fall_detection_model.pkl"
     # load the saved model from disk
     rf_model = joblib.load(model_file)
     # convert the input JSON to a numpy array
