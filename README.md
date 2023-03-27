@@ -2,6 +2,9 @@
 
 ver 0.0.1 (by Shiyu, Adam and Luohua)
 
+# Solution Diagram at a glance (WIP)
+![IoT-based Fall Detection System for Home Safety ](/course-reports/solution-diagram.jpeg)
+
 # Using VS Code's Remote IDE
 
 https://localhost:1441/#/
@@ -56,6 +59,8 @@ It is using Random Forest Classifier, the data we reply on to do fall detections
 
 and the model is trained with data set
 from https://archive.ics.uci.edu/ml/datasets/Simulated+Falls+and+Daily+Living+Activities+Data+Set#
+
+To make the fall detection more precise, we also try to introduce the heart-rate data to calibrate the detection result.
 
 # Algo model update
 
