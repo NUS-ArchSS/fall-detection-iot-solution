@@ -3,7 +3,7 @@
 ver 0.0.1 (by Shiyu, Adam and Luohua)
 
 # Solution Diagram at a glance (WIP)
-[IoT-based Fall Detection System for Home Safety ](./course-report/solution-diagram.jpeg)
+![IoT-based Fall Detection System for Home Safety ](./course-report/solution-diagram.jpeg)
 
 # Using VS Code's Remote IDE
 
@@ -51,7 +51,7 @@ The only step to onboard this product is, we will provide an admin portal to onb
 user (say, the caregiver) to provide device UUID and the mobile number for fall detection alert.
 
 # Fall Detection Algo Design Process
-We follow the Design Process for Human-Centric Systems to design our fall detection algo. See ![Design Process](./course-report/fall-detection-design-process.pdf)
+We follow the Design Process for Human-Centric Systems to design our fall detection algo. See [Design Process](./course-report/fall-detection-design-process.pdf)
 
 # The fall detection Algo
 
