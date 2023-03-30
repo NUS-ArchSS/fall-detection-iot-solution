@@ -50,6 +50,9 @@ We try to ship our products by enabling auto-pairing. For elder people, they jus
 The only step to onboard this product is, we will provide an admin portal to onboard the user. The admin portal requires
 user (say, the caregiver) to provide device UUID and the mobile number for fall detection alert.
 
+# Fall Detection Algo Design Process
+We follow the Design Process for Human-Centric Systems to design our fall detection algo. See ![Design Process](./course-report/fall-detection-design-process.pdf)
+
 # The fall detection Algo
 
 It is using Random Forest Classifier, the data we reply on to do fall detections, are from
