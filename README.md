@@ -3,7 +3,7 @@
 ver 0.0.1 (by Shiyu, Adam and Luohua)
 
 # Solution Diagram at a glance (WIP)
-![IoT-based Fall Detection System for Home Safety ](./course-report/solution-diagram.jpeg)
+[IoT-based Fall Detection System for Home Safety ](./course-report/solution-diagram.jpeg)
 
 # Using VS Code's Remote IDE
 
