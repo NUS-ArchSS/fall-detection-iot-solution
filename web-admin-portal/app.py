@@ -48,7 +48,7 @@ def submit_fall_detection():
     cursor = conn.cursor()
     cursor.execute('INSERT INTO fall_detection (uuid, fall_detection_msgid) VALUES (?, ?)',
                    (uuid, fall_detection_msgid))
-    conn.commit();
+    conn.commit()
     conn.close()
 
     return redirect(url_for('fall_detection'))
@@ -56,4 +56,4 @@ def submit_fall_detection():
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
