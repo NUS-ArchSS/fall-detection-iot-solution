@@ -1,4 +1,6 @@
 from flask import Flask, request, jsonify
+import requests
+
 import sqlite3
 from datetime import datetime
 
@@ -32,6 +34,9 @@ def save_data():
     if not data or not all(key in data for key in ["mag_x", "mag_y", "mag_z", "acc_x", "acc_y", "acc_z", "heart_rate"]):
         return jsonify({"error": "Invalid data format"}), 400
 
+    detect(mag_x=data['mag_x'], mag_y=data['mag_y'], mag_z=data['mag_z'], acc_x=data['acc_x'], acc_y=data['acc_y'],
+           acc_z=data['acc_z'], heart_rate=data['heart_rate'])
+
     conn = sqlite3.connect('sensor_data.db')
     c = conn.cursor()
     current_timestamp = int(datetime.utcnow().timestamp() * 1000)
@@ -44,6 +49,27 @@ def save_data():
     conn.close()
 
     return jsonify({"message": "Data saved successfully"}), 201
+
+
+def detect(mag_x, mag_y, mag_z, acc_x, acc_y, acc_z, heart_rate):
+    url = "http://127.0.0.1:5000/fall_detection"
+    headers = {"Content-Type": "application/json"}
+    data = {
+        "mag_x": mag_x,
+        "mag_y": mag_y,
+        "mag_z": mag_z,
+        "acc_x": acc_x,
+        "acc_y": acc_y,
+        "acc_z": acc_z,
+        "heart_rate": heart_rate
+    }
+
+    response = requests.post(url, json=data, headers=headers)
+
+    if response.status_code == 201:
+        print("Data sent successfully:", response.json())
+    else:
+        print("Error sending data:", response.json())
 
 
 if __name__ == '__main__':

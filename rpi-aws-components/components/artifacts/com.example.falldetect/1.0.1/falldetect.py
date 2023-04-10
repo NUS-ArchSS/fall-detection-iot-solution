@@ -29,6 +29,7 @@ def do_fall_detection(input_json):
     else:
         print("The model predicts that the input record does not represent a fall.")
 
+
 @app.route('/', methods=['POST'])
 def post_request():
     data = request.get_json()
@@ -49,4 +50,3 @@ def post_request():
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
-  
