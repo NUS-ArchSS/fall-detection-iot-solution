@@ -26,26 +26,30 @@ def do_fall_detection(input_json):
     # print the predicted fall value
     if prediction[0]:
         print("The model predicts that the input record represents a fall.")
+        return True
     else:
         print("The model predicts that the input record does not represent a fall.")
+        return False
 
 
 @app.route('/', methods=['POST'])
 def post_request():
     data = request.get_json()
-    Acc_X = data['Acc_X']
-    Acc_Y = data['Acc_Y']
-    Acc_Z = data['Acc_Z']
-    Mag_X = data['Mag_X']
-    Mag_Y = data['Mag_Y']
-    Mag_Z = data['Mag_Z']
+    Acc_X = data['acc_x']
+    Acc_Y = data['acc_y']
+    Acc_Z = data['acc_z']
+    Mag_X = data['mag_x']
+    Mag_Y = data['mag_y']
+    Mag_Z = data['mag_z']
+    # need to support heart rate
 
     input_json = '{{"Acc_X": {}, "Acc_Y": {}, "Acc_Z": {}, "Mag_X": {}, "Mag_Y": {}, "Mag_Z": {}}}'.format(Acc_X, Acc_Y,
                                                                                                            Acc_Z, Mag_X,
                                                                                                            Mag_Y, Mag_Z)
     print(input_json)
-    do_fall_detection(input_json)
-    return 'ok'
+    if do_fall_detection(input_json):
+        return 'yes'
+    return 'no'
 
 
 if __name__ == '__main__':
