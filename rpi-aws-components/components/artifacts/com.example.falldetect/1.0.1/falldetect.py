@@ -10,6 +10,7 @@ import joblib
 import warnings
 
 from flask import Flask, request
+import requests
 
 app = Flask(__name__)
 
@@ -67,6 +68,10 @@ def post_request():
                                                                                                            Mag_Y, Mag_Z)
     print(input_json)
     if do_fall_detection(input_json):
+        url = "http://localhost:5010/notify"
+        headers = {"Content-Type": "application/json"}
+
+        response = requests.post(url, headers=headers)
         return 'yes'
     return 'no'
 

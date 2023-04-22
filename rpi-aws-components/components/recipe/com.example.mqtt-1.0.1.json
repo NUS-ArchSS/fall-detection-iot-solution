@@ -12,7 +12,7 @@
           "com.example.mqtt:mqttproxy:1": {
             "policyDescription": "Allows access to pub/sub to mypi/mqtt.",
             "operations": ["aws.greengrass#PublishToIoTCore"],
-            "resources": ["mypi/button"]
+            "resources": ["falldetection/test"]
           }
         }
       }

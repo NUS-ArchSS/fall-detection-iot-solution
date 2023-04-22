@@ -1,7 +1,12 @@
+"""
+sudo /greengrass/v2/bin/greengrass-cli deployment create --recipeDir ~/fall-detection-iot-solution/rpi-aws-components/components/recipe/ --artifactDir ~/fall-detection-iot-solution/rpi-aws-components/components/artifacts/ --merge "com.example.mqtt=1.0.1"
+sudo /greengrass/v2/bin/greengrass-cli deployment create --remove com.example.mqtt
+"""
 import time
 import traceback
 import awsiot.greengrasscoreipc
 import awsiot.greengrasscoreipc.client as client
+from flask import Flask, request, jsonify
 import json
 from awsiot.greengrasscoreipc.model import (
     IoTCoreMessage,
@@ -9,10 +14,11 @@ from awsiot.greengrasscoreipc.model import (
     PublishToIoTCoreRequest
 )
 
-publishtopic = "mypi/button"
+app = Flask(__name__)
+
+publishtopic = "falldetection/test"
 
 message =  {
-  "button": "b4pressed",
   "timemillis": 000000000000
 }
 
@@ -22,12 +28,11 @@ subqos = QOS.AT_MOST_ONCE
 
 ipc_client = awsiot.greengrasscoreipc.connect()
 
-#button 4 callback
-def button4pressed():
+def notify():
     message["timemillis"] = round(time.time() * 1000)
 
     msgstring = json.dumps(message)
-    print("going to publish...456")
+    print("going to publish...")
     pubrequest = PublishToIoTCoreRequest()
     pubrequest.topic_name = publishtopic
     pubrequest.payload = bytes(msgstring, "utf-8")
@@ -36,13 +41,21 @@ def button4pressed():
     operation.activate(pubrequest)
     future = operation.get_response()
     future.result(TIMEOUT)
-    print("done publish...456")
+    print("done publish...")
 
-button4pressed()
+@app.route('/notify', methods=['POST'])
+def post_request():
+    # data = request.get_json()
+    # Acc_X = data['acc_x']
+    # Acc_Y = data['acc_y']
+    # # need to support heart rate
 
-print("button event detect finished")
+    # input_json = '{{"Acc_X": {}, "Acc_Y": {}, "Acc_Z": {}, "Mag_X": {}, "Mag_Y": {}, "Mag_Z": {}}}'.format(Acc_X, Acc_Y,
+    #                                                                                                        Acc_Z, Mag_X,
+    #                                                                                                        Mag_Y, Mag_Z)
+    # print(input_json)
+    notify()
+    return 'NUS ISS dummy response'
 
-while True:
-  pass
-
-print("you should never see this line")
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=5010)
