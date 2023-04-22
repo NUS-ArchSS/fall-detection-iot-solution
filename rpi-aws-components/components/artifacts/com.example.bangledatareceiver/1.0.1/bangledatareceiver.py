@@ -1,8 +1,14 @@
+"""
+sudo /greengrass/v2/bin/greengrass-cli deployment create --recipeDir ~/fall-detection-iot-solution/rpi-aws-components/components/recipe/ --artifactDir ~/fall-detection-iot-solution/rpi-aws-components/components/artifacts/ --merge "com.example.bangledatareceiver=1.0.1"
+sudo /greengrass/v2/bin/greengrass-cli deployment create --remove com.example.bangledatareceiver
+"""
 import asyncio
 import logging
 import queue
 import threading
 import time
+import requests
+
 
 from bleak import BleakScanner, BleakClient
 from bleak.backends.characteristic import BleakGATTCharacteristic
@@ -53,9 +59,11 @@ def process_data(data_bytearray, accl_queue: queue, mag_queue: queue):
                     "data_values": data_values
                 }
                 if name == 'Accel':
-                    accl_queue.put(data_dict)
+                    if len(data_values) >= 3:
+                        accl_queue.put(data_dict)
                 else:
-                    mag_queue.put(data_dict)
+                    if len(data_values) >=3:
+                        mag_queue.put(data_dict)
                 # data_list.append(data_dict)
     
 def handle_data(characteristic: BleakGATTCharacteristic, data: bytearray):
@@ -92,7 +100,10 @@ def consumer():
 
         # Process the message
         print("Received message:", message1, message2)
-        
+
+        url = "http://localhost:8000/data"
+        headers = {"Content-Type": "application/json"}
+
         data = {
             "mag_x": message2['data_values'][0],
             "mag_y": message2['data_values'][1],
@@ -104,6 +115,10 @@ def consumer():
         }
         print(data)
 
+        response = requests.post(url, json=data, headers=headers)
+
+        print(response.content.decode('utf-8'))
+        
         # Mark the message as consumed
         try:
             accl_queue.task_done()

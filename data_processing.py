@@ -42,6 +42,6 @@ def process_data(data_bytearray, accl_queue: queue, mag_queue: queue):
                     accl_queue.put(data_dict)
                 else:
                     mag_queue.put(data_dict)
-                # data_list.append(data_dict)
+                data_list.append(data_dict)
 
     return data_list;
