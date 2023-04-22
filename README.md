@@ -34,6 +34,9 @@ To deploy a component
 sudo /greengrass/v2/bin/greengrass-cli deployment create --recipeDir ~/fall-detection-iot-solution/rpi-aws-components/components/recipe/ --artifactDir ~/fall-detection-iot-solution/rpi-aws-components/components/artifacts/ --merge "com.example.falldetect=1.0.1"
 ```
 
+The log is under (using root user to view or `sudo pcmanfm`)
+```/greengrass/v2/logs```
+
 # To check AWS IoT Greengrass logs
 
 Run `sudo pcmanfm` and navigate to `/greengrass/v2/logs/`
