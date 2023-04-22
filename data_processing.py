@@ -1,4 +1,6 @@
-def process_data(data_bytearray):
+import queue
+
+def process_data(data_bytearray, accl_queue: queue, mag_queue: queue):
     # Convert the bytearray to a string
     # bytearray(b'1681367616818.033203125,Accel,-0.20727539062,-0.73022460937,-0.71899414062,\n1681367616821.6953125,Mag,300,622,257,\n')
     line = data_bytearray.decode('utf-8')
@@ -23,7 +25,7 @@ def process_data(data_bytearray):
         line = line.rstrip(',')
 
         # Check if any data exist
-        if any(keyword in line for keyword in ["HRMraw", "HRM", "Accel", "Mag"]):
+        if any(keyword in line for keyword in ["Accel", "Mag"]):
             line_parts = line.split(",")
             # if data value not null
             if len(line_parts) > 1:
@@ -36,6 +38,10 @@ def process_data(data_bytearray):
                     "name": name,
                     "data_values": data_values
                 }
-                data_list.append(data_dict)
+                if name == 'Accel':
+                    accl_queue.put(data_dict)
+                else:
+                    mag_queue.put(data_dict)
+                # data_list.append(data_dict)
 
     return data_list;

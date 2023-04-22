@@ -1,11 +1,12 @@
 import math
-from awsiot.mqtt_publish import publishData
+import datetime
+# from awsiot.mqtt_publish import publishData
 
 class FallDetector:
     def __init__(self, threshold):
         self.threshold = threshold
     
-    def detect_fall(self, data):
+    def simple_detect_fall(self, data):
         # Check for accel in the data
         if data["name"] == "Accel":
             # Check if there are at least 3 values
@@ -18,4 +19,4 @@ class FallDetector:
                 if is_fall:
                     print("Fall detected:", is_fall)
                     data_time=data["data_time"]
-                    publishData(data_time)
+                    # publishData(data_time)

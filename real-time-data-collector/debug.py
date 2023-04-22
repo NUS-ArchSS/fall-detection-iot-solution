@@ -2,7 +2,7 @@ import sqlite3
 
 
 def read_data():
-    conn = sqlite3.connect('sensor_data.db')
+    conn = sqlite3.connect('/tmp/sensor_data.db')
     cursor = conn.cursor()
 
     cursor.execute('SELECT * FROM sensor_data')
