@@ -23,11 +23,11 @@ last_request_time = time.time()
 
 publishtopic = "falldetection/test"
 
-message =  {
-  "device": "Bangle.js 60c6",
-  "msg_id": 000000000000,
-  "fall_detected": "true",
-  "current_time": 1
+message = {
+    "device": "Bangle.js 60c6",
+    "msg_id": 000000000000,
+    "fall_detected": "true",
+    "current_time": 1
 }
 
 TIMEOUT = 10
@@ -35,6 +35,7 @@ qos = QOS.AT_LEAST_ONCE
 subqos = QOS.AT_MOST_ONCE
 
 ipc_client = awsiot.greengrasscoreipc.connect()
+
 
 def notify():
     global last_request_time
@@ -48,7 +49,7 @@ def notify():
 
         message["msg_id"] = round(time.time() * 1000)
         now = datetime.now()
-        message["current_time"]  = now.strftime("%H:%M:%S")
+        message["current_time"] = now.strftime("%H:%M:%S")
 
         msgstring = json.dumps(message)
         print("going to publish...")
@@ -63,6 +64,7 @@ def notify():
         print("done publish...")
         return 'Sent notification.'
 
+
 @app.route('/notify', methods=['POST'])
 def post_request():
     # data = request.get_json()
@@ -75,8 +77,8 @@ def post_request():
     #                                                                                                        Mag_Y, Mag_Z)
     # print(input_json)
     notify()
-    return 'NUS ISS dummy response'
-    
+    return jsonify({"message": "Sent notification."}), 200
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5010)

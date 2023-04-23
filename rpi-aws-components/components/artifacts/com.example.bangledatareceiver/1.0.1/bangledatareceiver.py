@@ -20,6 +20,7 @@ SERVICE_UUID = "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
 accl_queue = queue.Queue()
 mag_queue = queue.Queue()
 
+
 def process_data(data_bytearray, accl_queue: queue, mag_queue: queue):
     # Convert the bytearray to a string
     # bytearray(b'1681367616818.033203125,Accel,-0.20727539062,-0.73022460937,-0.71899414062,\n1681367616821.6953125,Mag,300,622,257,\n')
@@ -62,26 +63,18 @@ def process_data(data_bytearray, accl_queue: queue, mag_queue: queue):
                     if len(data_values) >= 3:
                         accl_queue.put(data_dict)
                 else:
-                    if len(data_values) >=3:
+                    if len(data_values) >= 3:
                         mag_queue.put(data_dict)
                 # data_list.append(data_dict)
-    
+
+
 def handle_data(characteristic: BleakGATTCharacteristic, data: bytearray):
     # logger.info(str(data))
     process_data(data, accl_queue, mag_queue)
-    # for data_dict in data_list:
-    #     simple_detect_fall(data_dict)
-
-    
-
-# def simple_detect_fall(data):
-#     # Fall detection
-#     # Initialize the fall detector with a threshold value
-#     threshold = 1.5
-#     fall_detector = FallDetector(threshold)
-#     fall_detector.detect_fall(data)
 
 # Define the consumer thread function
+
+
 def consumer():
     while True:
         try:
@@ -90,7 +83,7 @@ def consumer():
         except queue.Empty:
             time.sleep(0.1)
             continue
-        
+
         try:
             # print('Try to get a message from mag_queue')
             message2 = mag_queue.get_nowait()
@@ -118,13 +111,13 @@ def consumer():
         response = requests.post(url, json=data, headers=headers)
 
         print(response.content.decode('utf-8'))
-        
+
         # Mark the message as consumed
         try:
             accl_queue.task_done()
         except ValueError:
             pass
-        
+
         try:
             mag_queue.task_done()
         except ValueError:
