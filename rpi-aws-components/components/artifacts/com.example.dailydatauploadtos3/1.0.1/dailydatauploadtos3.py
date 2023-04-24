@@ -56,8 +56,8 @@ def upload_file():
 
     export_data(db_export_file)
     session = boto3.Session(
-        aws_access_key_id='AKIA3XOWMCOIFVZPPMMN',
-        aws_secret_access_key='B0DXyWEiBvEOfX1fof8b10ikoYNGQP/1pLMnrgHR',
+        aws_access_key_id='<your-access-key>',
+        aws_secret_access_key='<your-secret-key>',
     )
 
     s3_client = session.client('s3')
