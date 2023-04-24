@@ -5,6 +5,24 @@ ver 0.0.1 (by Shiyu, Adam and Luohua)
 # Solution Diagram at a glance (WIP)
 ![IoT-based Fall Detection System for Home Safety ](./course-report/solution-diagram.jpeg)
 
+# Data from bangle watch
+
+![sc-bangle](https://p.ipic.vip/o7maa9.png)
+
+Once the app is launched by user, the following data will be send out through Web Bluetooth
+
+- Time - Current time (milliseconds since 1970)
+
+- [Accelerometer data](http://www.espruino.com/ReferenceBANGLEJS2#l_Bangle_accel)
+
+  - `x` is X axis (left-right) in `g`
+  - `y` is Y axis (up-down) in `g`
+  - `z` is Z axis (in-out) in `g`
+
+- [Magnetometer readings](http://www.espruino.com/ReferenceBANGLEJS2#l_Bangle_mag)
+
+  - `x/y/z` raw x,y,z magnetometer readings
+
 # Using VS Code's Remote IDE
 
 https://localhost:1441/#/
