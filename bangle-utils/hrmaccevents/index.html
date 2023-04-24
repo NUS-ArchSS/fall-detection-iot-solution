@@ -1,0 +1,43 @@
+<html>
+
+<head>
+  <title>Bangle.js Accelerometer streaming</title>
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <script src="https://www.puck-js.com/puck.js"></script>
+  <div class="container">
+    <button id="btnConnect" class="btn btn-primary my-2">Connect</button>
+
+    <div class="form-group">
+      <label class="form-switch">
+        <input type="checkbox" id="chkLocal">
+        <i class="form-icon"></i> Store on bangle (file named log.csv)
+      </label>
+    </div>
+    </p>
+    <p>
+      <button id="btnConnect" class="btn btn-primary">Start</button>
+      <button id="btnStop" class="btn btn-secondary">Stop</button>
+      <button id="btnReset" class="btn btn-secondary">Reset</button>
+      <button id="btnSave" class="btn btn-primary">Save CSV</button>
+      <button id="btnDownload" class="btn btn-primary">Download CSV</button>
+    </p>
+    <p id="result"></p>
+
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://www.puck-js.com/puck.js"></script>
+
+    <h1>Accelerometer streaming</h1>
+    <p>X: <span class="bar"><span id="barX"></span></span></p>
+    <p>Y: <span class="bar"><span id="barY"></span></span></p>
+    <p>Z: <span class="bar"><span id="barZ"></span></span></p>
+    <div id="chartContainer"></div>
+  </div>
+  <script src=" app.js">
+  </script>
+</body>
+
+</html>
