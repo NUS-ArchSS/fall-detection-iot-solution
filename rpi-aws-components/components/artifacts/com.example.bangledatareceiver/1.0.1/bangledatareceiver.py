@@ -9,7 +9,6 @@ import threading
 import time
 import requests
 
-
 from bleak import BleakScanner, BleakClient
 from bleak.backends.characteristic import BleakGATTCharacteristic
 
@@ -71,6 +70,7 @@ def process_data(data_bytearray, accl_queue: queue, mag_queue: queue):
 def handle_data(characteristic: BleakGATTCharacteristic, data: bytearray):
     # logger.info(str(data))
     process_data(data, accl_queue, mag_queue)
+
 
 # Define the consumer thread function
 
@@ -152,7 +152,7 @@ async def main():
         disconnected_event.set()
 
     async with BleakClient(
-        device, disconnected_callback=disconnected_callback
+            device, disconnected_callback=disconnected_callback
     ) as client:
         logger.info("Connected: %r", client.is_connected)
         logger.info("Connected to Bangle.js watch: " + bangle.address)
@@ -178,6 +178,7 @@ async def main():
         finally:
             print(f"Stop notifing...")
             await client.stop_notify(SERVICE_UUID)
+
 
 if __name__ == "__main__":
 

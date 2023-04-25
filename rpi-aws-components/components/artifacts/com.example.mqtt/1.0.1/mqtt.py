@@ -72,13 +72,12 @@ def post_request():
     # Acc_Y = data['acc_y']
     # # need to support heart rate
 
-    # input_json = '{{"Acc_X": {}, "Acc_Y": {}, "Acc_Z": {}, "Mag_X": {}, "Mag_Y": {}, "Mag_Z": {}}}'.format(Acc_X, Acc_Y,
-    #                                                                                                        Acc_Z, Mag_X,
-    #                                                                                                        Mag_Y, Mag_Z)
-    # print(input_json)
+    # input_json = '{{"Acc_X": {}, "Acc_Y": {}, "Acc_Z": {}, "Mag_X": {}, "Mag_Y": {}, "Mag_Z": {}}}'.format(Acc_X,
+    # Acc_Y, Acc_Z, Mag_X, Mag_Y, Mag_Z) print(input_json)
     notify()
     return jsonify({"message": "Sent notification."}), 200
 
 
 if __name__ == '__main__':
+    # for debug only (should use host='127.0.0.1'). Should not open to public usage due to security concern
     app.run(host="0.0.0.0", port=5010)

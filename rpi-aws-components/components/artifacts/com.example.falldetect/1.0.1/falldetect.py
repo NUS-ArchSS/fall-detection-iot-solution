@@ -35,6 +35,7 @@ def do_fall_detection(input_json):
         print("The model predicts that the input record does not represent a fall.")
         return False
 
+
 """
 # fall = yes
 curl --location --request POST 'http://localhost:5000/fall_detection' \
@@ -45,6 +46,8 @@ curl --location --request POST 'http://localhost:5000/fall_detection' \
 --header 'Content-Type: application/json' \
 --data-raw '{"acc_x": 9.352111816406250000, "acc_y": -2.879333496093750000, "acc_z": 1.144409179687500000, "mag_x": -0.623779296875000000, "mag_y": 0.662597656250000000, "mag_z": -0.643066406250000000}'
 """
+
+
 @app.route('/fall_detection', methods=['POST'])
 def post_request():
     data = request.get_json()
@@ -66,4 +69,5 @@ def post_request():
 
 
 if __name__ == '__main__':
+    # for debug only (should use host='127.0.0.1'). Should not open to public usage due to security concern
     app.run(host="0.0.0.0", port=5000)

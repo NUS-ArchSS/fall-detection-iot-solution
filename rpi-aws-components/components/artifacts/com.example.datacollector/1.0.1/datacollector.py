@@ -16,6 +16,8 @@ curl --location --request POST 'http://localhost:8000/data' --header 'Content-Ty
   "message": "Data saved successfully"
 }
 """
+
+
 def init_db():
     conn = sqlite3.connect('/tmp/sensor_data.db')
     c = conn.cursor()
@@ -43,8 +45,9 @@ def save_data():
     if not data or not all(key in data for key in ["mag_x", "mag_y", "mag_z", "acc_x", "acc_y", "acc_z", "ctime"]):
         return jsonify({"error": "Invalid data format"}), 400
 
-    if_fall = detect(mag_x=data['mag_x'], mag_y=data['mag_y'], mag_z=data['mag_z'], acc_x=data['acc_x'], acc_y=data['acc_y'],
-           acc_z=data['acc_z'])
+    if_fall = detect(mag_x=data['mag_x'], mag_y=data['mag_y'], mag_z=data['mag_z'], acc_x=data['acc_x'],
+                     acc_y=data['acc_y'],
+                     acc_z=data['acc_z'])
     result = ''
     if if_fall:
         result = 1
@@ -58,7 +61,7 @@ def save_data():
         INSERT INTO sensor_data (mag_x, mag_y, mag_z, acc_x, acc_y, acc_z, create_timestamp, result)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     ''', (data["mag_x"], data["mag_y"], data["mag_z"], data["acc_x"], data["acc_y"], data["acc_z"],
-        data['ctime'], result))
+          data['ctime'], result))
     conn.commit()
     conn.close()
 
@@ -87,4 +90,5 @@ def detect(mag_x, mag_y, mag_z, acc_x, acc_y, acc_z):
 
 if __name__ == '__main__':
     init_db()
+    # for debug only (should use host='127.0.0.1'). Should not open to public usage due to security concern
     app.run(debug=True, host='0.0.0.0', port=8000)

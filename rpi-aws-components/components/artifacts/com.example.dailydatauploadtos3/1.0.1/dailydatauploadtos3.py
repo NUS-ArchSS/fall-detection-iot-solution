@@ -35,6 +35,7 @@ def export_data(file_name):
             print(row)
             writer.writerow(row)
 
+
 """
 [development purpose]: you need to setup it with yours
 cat /root/.aws/credentials
@@ -42,6 +43,7 @@ cat /root/.aws/credentials
 aws_access_key_id = <your-access-key>
 aws_secret_access_key = <your-secret-key>
 """
+
 
 def upload_file():
     now = datetime.datetime.now()
@@ -70,6 +72,5 @@ def upload_file():
         return False
     return True
 
+
 upload_file()
-
-

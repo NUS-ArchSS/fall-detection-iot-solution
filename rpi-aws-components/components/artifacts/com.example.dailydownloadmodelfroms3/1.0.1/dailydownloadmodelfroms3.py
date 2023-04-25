@@ -20,6 +20,7 @@ aws_access_key_id = <your-access-key>
 aws_secret_access_key = <your-secret-key>
 """
 
+
 def download_file():
     now = datetime.datetime.now()
     # Format the date and time as a string in the format "yyyy-mm-dd-H-M-S"
@@ -31,7 +32,6 @@ def download_file():
     # os.environ['AWS_SHARED_CREDENTIALS_FILE'] = '/root/.aws/credentials'
     # session = boto3.Session(profile_name='default')
 
-    export_data(db_export_file)
     session = boto3.Session(
         aws_access_key_id='<your-access-key>',
         aws_secret_access_key='<your-aws-secret-access-key>',
@@ -49,6 +49,5 @@ def download_file():
         return False
     return True
 
+
 download_file()
-
-
