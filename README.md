@@ -1,12 +1,16 @@
 # fall-detection-iot-solution
 
-ver 0.0.1 (by Shiyu, Adam and Luohua)
+ver 0.0.1 (by Adam, ChatGPT, Luohua, Shiyu)
 
 All artifacts can be found from https://drive.google.com/drive/u/1/folders/1IZYhe6mn8hMXtcixAMq8bm1oOd1fXOrj
 
-# Solution Diagram at a glance (WIP)
+# Solution Diagram at a glance
 
-![IoT-based Fall Detection System for Home Safety ](doc/solution-diagram.jpeg)
+![IoT-based Fall Detection System for Home Safety](doc/solution-diagram.jpg)
+
+# Data Flow
+
+![Data Flow](doc/data-flow.jpg)
 
 # Data from bangle watch
 
@@ -25,53 +29,6 @@ Once the app is launched by user, the following data will be send out through We
 - [Magnetometer readings](http://www.espruino.com/ReferenceBANGLEJS2#l_Bangle_mag)
 
     - `x/y/z` raw x,y,z magnetometer readings
-
-# Using VS Code's Remote IDE
-
-https://localhost:1441/#/
-You need to run below command to generate console password daily
-
-```
-sudo /greengrass/v2/bin/greengrass-cli get-debug-password
-```
-
-# AWS IoT commands
-
-Instead of using AWS's local Web Console, you can also use below command to list services
-
-```
-sudo /greengrass/v2/bin/greengrass-cli component list
-```
-
-To remove a component
-
-```
-sudo /greengrass/v2/bin/greengrass-cli deployment create --remove com.example.falldetect
-```
-
-To deploy a component
-
-```
-sudo /greengrass/v2/bin/greengrass-cli deployment create --recipeDir ~/fall-detection-iot-solution/rpi-aws-components/components/recipe/ --artifactDir ~/fall-detection-iot-solution/rpi-aws-components/components/artifacts/ --merge "com.example.falldetect=1.0.1"
-```
-
-The log is under (using root user to view or `sudo pcmanfm`)
-```/greengrass/v2/logs```
-
-# To check AWS IoT Greengrass logs
-
-Run `sudo pcmanfm` and navigate to `/greengrass/v2/logs/`
-
-# How to pair bangle watch and RPi
-
-It tries to exposure BLE connection via JS from bangle watch, and then there is python script running on RPi to try to
-connect to bangle watch via BLE by using device UUID.
-
-# Humanizing the solution
-
-We try to ship our products by enabling auto-pairing. For elder people, they just need to "Wear&GO"
-The only step to onboard this product is, we will provide an admin portal to onboard the user. The admin portal requires
-user (say, the caregiver) to provide device UUID and the mobile number for fall detection alert.
 
 # Fall Detection Algo Design Process
 
@@ -98,25 +55,6 @@ The classifier accuracy comparison:
 | bayesian_decision_making_classifier.py   | 0.646             |
 
 We decided to use Random Forest Classifier to do fall detection.
-
-# Algo model update
-
-We provide the caregiver a web page to report false fall detection.
-Every night the RPi will upload the daily fall detection data in batch to AWS for model training.
-Every night the RPi will download the latest model for fall detection.
-
-# How to do a fall detection?
-
-```
-curl --location --request POST 'http://your-rpi-server-ip:5000/' \
---header 'Content-Type: application/json' \
---data-raw '{"Acc_X": 9.681701660156250000, "Acc_Y": 1.020812988281250000, "Acc_Z": 1.863098144531250000, "Mag_X": -0.815185546875000000, "Mag_Y": 0.412353515625000000, "Mag_Z": 0.079833984375000000}'
-```
-
-# How to notify caregiver when a fall is detected
-
-The component `rpi-aws-components/components/artifacts/com.example.mqtt` will serve the fall detected msg and send msg
-to AWS SNS service via MQTT. The AWS SNS then triggers a SMS to registered caregivers.
 
 # When all else fails
 
