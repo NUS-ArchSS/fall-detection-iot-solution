@@ -4,15 +4,17 @@ ver 0.0.1 (by Adam, ChatGPT, Luohua, Shiyu)
 
 All artifacts can be found from https://drive.google.com/drive/u/1/folders/1IZYhe6mn8hMXtcixAMq8bm1oOd1fXOrj
 
-# Solution Diagram at a glance
+# How it works
+
+## Solution Diagram at a glance
 
 ![IoT-based Fall Detection System for Home Safety](doc/solution-diagram.jpg)
 
-# Data Flow
+## Data Flow
 
 ![Data Flow](doc/data-flow.jpg)
 
-# Data from bangle watch
+## Data from bangle watch
 
 ![sc-bangle](https://p.ipic.vip/o7maa9.png)
 
@@ -30,12 +32,12 @@ Once the app is launched by user, the following data will be send out through We
 
     - `x/y/z` raw x,y,z magnetometer readings
 
-# Fall Detection Algo Design Process
+## Fall Detection Algo Design Process
 
 We follow the Design Process for Human-Centric Systems to design our fall detection algo.
 See [Design Process](doc/fall-detection-design-process.pdf)
 
-# The fall detection Algo
+## The fall detection Algo
 
 The data we reply on to do fall detections, are from
 
@@ -56,8 +58,22 @@ The classifier accuracy comparison:
 
 We decided to use Random Forest Classifier to do fall detection.
 
+# How to make it work for you
+
+1. Follow [this instruction](doc/aws-greengrass-setup.md) to setup Raspberry Pi
+2. Follow [this instruction](bangle-app/README.md) to setup app on Bangle watch
+
 # When all else fails
 
-This repo is a team effort, although it is under Luohua's git account. Contact luohua.huang@u.nus.edu and someone from
-the team will help you out.
+[Create an Issue](https://github.com/NUS-ArchSS/fall-detection-iot-solution/issues/new) 
+
+or
+
+Contact someone on the team
+
+- luohua.huang@u.nus.edu
+
+- shiyu.wang@u.nus.edu
+
+- adamwwsia@u.nus.edu
 
