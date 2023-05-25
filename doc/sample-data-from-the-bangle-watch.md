@@ -1,3 +1,5 @@
+# Sample sensor data from the Bangle Watch
+
 ## Accelerometer
 
 http://www.espruino.com/ReferenceBANGLEJS2#l_Bangle_getAccel
