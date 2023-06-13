@@ -2,6 +2,7 @@
 sudo /greengrass/v2/bin/greengrass-cli deployment create --recipeDir ~/fall-detection-iot-solution/rpi-aws-components/components/recipe/ --artifactDir ~/fall-detection-iot-solution/rpi-aws-components/components/artifacts/ --merge "com.example.falldetect=1.0.1"
 sudo /greengrass/v2/bin/greengrass-cli deployment create --remove com.example.falldetect
 """
+import math
 import time
 import json
 
@@ -14,25 +15,49 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-warnings.filterwarnings('ignore', message='X does not have valid feature names')
+warnings.filterwarnings(
+    'ignore', message='X does not have valid feature names')
 
 
 def do_fall_detection(input_json):
-    model_file = "/home/pi/algo-model/fall_detection_model.pkl"
-    # load the saved model from disk
-    rf_model = joblib.load(model_file)
-    # convert the input JSON to a numpy array
+    # model_file = "/home/pi/algo-model/fall_detection_model.pkl"
+    # # load the saved model from disk
+    # rf_model = joblib.load(model_file)
+    # # convert the input JSON to a numpy array
+    # input_dict = json.loads(input_json)
+    # input_list = [input_dict[key] for key in input_dict.keys()]
+    # input_data = np.array(input_list).reshape(1, -1)
+    # # use the trained model to predict the fall value for the input record
+    # prediction = rf_model.predict(input_data)
+    # # print the predicted fall value
+    # if prediction[0]:
+    #     print("The model predicts that the input record represents a fall.")
+    #     return True
+    # else:
+    #     print("The model predicts that the input record does not represent a fall.")
+    #     return False
+
     input_dict = json.loads(input_json)
-    input_list = [input_dict[key] for key in input_dict.keys()]
-    input_data = np.array(input_list).reshape(1, -1)
-    # use the trained model to predict the fall value for the input record
-    prediction = rf_model.predict(input_data)
-    # print the predicted fall value
-    if prediction[0]:
-        print("The model predicts that the input record represents a fall.")
+    # Access the values of Acc_X, Acc_Y, and Acc_Z
+    Acc_X = input_dict['Acc_X']
+    Acc_Y = input_dict['Acc_Y']
+    Acc_Z = input_dict['Acc_Z']
+
+    x, y, z = float(Acc_X), float(Acc_Y), float(Acc_Z)
+    magnitude = math.sqrt(x**2 + y**2 + z**2)
+    is_fall = magnitude > 1.5
+
+    if is_fall:
+        print("Fall detected:", is_fall)
+        print("###############################")
+        print("FALL DETECT: YES ***")
+        print("###############################")
         return True
     else:
-        print("The model predicts that the input record does not represent a fall.")
+        print("###############################")
+        print("FALL DETECT: NO ***")
+        print("###############################")
+
         return False
 
 
@@ -70,4 +95,4 @@ def post_request():
 
 if __name__ == '__main__':
     # for debug only (should use host='127.0.0.1'). Should not open to public usage due to security concern
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="127.0.0.1", port=5001)
