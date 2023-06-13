@@ -70,3 +70,5 @@ yarn.lock
 # Custom folders
 # Add any custom folders or files you want to ignore
 
+.env
+
