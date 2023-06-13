@@ -51,7 +51,7 @@ def do_fall_detection(input_json):
     is_fall = magnitude > 1.5
 
     if is_fall:
-        print("Fall detected:", is_fall)
+        # print("Fall detected:", is_fall)
         print("###############################")
         print("FALL DETECT: YES ***")
         print("###############################")
@@ -89,6 +89,10 @@ def post_request():
                                                                                                            Mag_Y, Mag_Z)
     # print(input_json)
     if do_fall_detection(input_json):
+        url = "http://localhost:5010/notify"
+        headers = {"Content-Type": "application/json"}
+
+        response = request.post(url, headers=headers)
         return 'yes'
     return 'no'
 

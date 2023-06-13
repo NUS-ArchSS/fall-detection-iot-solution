@@ -16,7 +16,7 @@ smtp_server = os.getenv("SMTP_SERVER")
 smtp_port = os.getenv("SMTP_PORT")
 
 
-def send_email(sender_email, sender_password, receiver_email, subject, message):
+def send_email(subject, message):
     smtp_username = sender_email
 
     # Create a multipart message object
@@ -39,9 +39,3 @@ def send_email(sender_email, sender_password, receiver_email, subject, message):
         print("Email sent successfully!")
     except smtplib.SMTPException as e:
         print("Error sending email:", str(e))
-
-
-subject = "Hello from Python!"
-message = "This is a test email sent from a Python app."
-
-send_email(sender_email, sender_password, receiver_email, subject, message)

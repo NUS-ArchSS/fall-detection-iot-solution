@@ -1,4 +1,5 @@
 import paho.mqtt.client as mqtt
+from notify import send_email
 
 # MQTT broker configuration
 # broker_address = "192.168.1.112"
@@ -15,7 +16,9 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-    print(f"Received message: {msg.payload.decode()}")
+    str_message = msg.payload.decode()
+    print(f"Received message: {str_message}")
+    send_email("Fall detected", str_message)
 
 
 # Create an MQTT client
