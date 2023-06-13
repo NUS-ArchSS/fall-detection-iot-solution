@@ -2,18 +2,21 @@
 sudo /greengrass/v2/bin/greengrass-cli deployment create --recipeDir ~/fall-detection-iot-solution/rpi-aws-components/components/recipe/ --artifactDir ~/fall-detection-iot-solution/rpi-aws-components/components/artifacts/ --merge "com.example.falldetect=1.0.1"
 sudo /greengrass/v2/bin/greengrass-cli deployment create --remove com.example.falldetect
 """
+import logging
 import math
-import time
+# import time
 import json
 
 import json
-import numpy as np
-import joblib
+# import numpy as np
+# import joblib
 import warnings
 
 from flask import Flask, request
 
 app = Flask(__name__)
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 warnings.filterwarnings(
     'ignore', message='X does not have valid feature names')
@@ -54,10 +57,7 @@ def do_fall_detection(input_json):
         print("###############################")
         return True
     else:
-        print("###############################")
-        print("FALL DETECT: NO ***")
-        print("###############################")
-
+        # print("FALL DETECT: NO ***")
         return False
 
 
@@ -87,7 +87,7 @@ def post_request():
     input_json = '{{"Acc_X": {}, "Acc_Y": {}, "Acc_Z": {}, "Mag_X": {}, "Mag_Y": {}, "Mag_Z": {}}}'.format(Acc_X, Acc_Y,
                                                                                                            Acc_Z, Mag_X,
                                                                                                            Mag_Y, Mag_Z)
-    print(input_json)
+    # print(input_json)
     if do_fall_detection(input_json):
         return 'yes'
     return 'no'

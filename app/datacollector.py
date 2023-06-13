@@ -2,11 +2,15 @@
 sudo /greengrass/v2/bin/greengrass-cli deployment create --recipeDir ~/fall-detection-iot-solution/rpi-aws-components/components/recipe/ --artifactDir ~/fall-detection-iot-solution/rpi-aws-components/components/artifacts/ --merge "com.example.datacollector=1.0.1"
 sudo /greengrass/v2/bin/greengrass-cli deployment create --remove com.example.datacollector
 """
+import logging
 from flask import Flask, request, jsonify
 import requests
 
 import sqlite3
 from datetime import datetime
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 app = Flask(__name__)
 
@@ -69,7 +73,7 @@ def save_data():
 
 
 def detect(mag_x, mag_y, mag_z, acc_x, acc_y, acc_z):
-    url = "http://localhost:5000/fall_detection"
+    url = "http://localhost:5001/fall_detection"
     headers = {"Content-Type": "application/json"}
     data = {
         "mag_x": mag_x,
@@ -91,4 +95,4 @@ def detect(mag_x, mag_y, mag_z, acc_x, acc_y, acc_z):
 if __name__ == '__main__':
     init_db()
     # for debug only (should use host='127.0.0.1'). Should not open to public usage due to security concern
-    app.run(debug=True, host='0.0.0.0', port=8000)
+    app.run(debug=False, host='127.0.0.1', port=8000)

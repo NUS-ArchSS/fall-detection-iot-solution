@@ -92,7 +92,7 @@ def consumer():
             continue
 
         # Process the message
-        print("Received message:", message1, message2)
+        # print("Received message:", message1, message2)
 
         url = "http://localhost:8000/data"
         headers = {"Content-Type": "application/json"}
@@ -106,11 +106,11 @@ def consumer():
             "acc_z": message1['data_values'][2],
             "ctime": 12348888
         }
-        print(data)
+        # print(data)
 
         response = requests.post(url, json=data, headers=headers)
 
-        print(response.content.decode('utf-8'))
+        # print(response.content.decode('utf-8'))
 
         # Mark the message as consumed
         try:
