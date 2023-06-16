@@ -39,7 +39,10 @@ def do_fall_detection(input_json):
     #     print("The model predicts that the input record does not represent a fall.")
     #     return False
 
-    input_dict = json.loads(input_json)
+    try:
+        input_dict = json.loads(input_json)
+    except Exception as e:
+        print("Error decoding JSON:", str(e))
     # Access the values of Acc_X, Acc_Y, and Acc_Z
     Acc_X = input_dict['Acc_X']
     Acc_Y = input_dict['Acc_Y']
