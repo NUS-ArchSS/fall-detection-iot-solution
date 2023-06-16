@@ -2,7 +2,7 @@ import paho.mqtt.client as mqtt
 from notify import send_email
 
 # MQTT broker configuration
-# broker_address = "192.168.1.112"
+# broker_address = "192.168.1.110"
 broker_address = "127.0.0.1"
 broker_port = 1883  # Default MQTT port
 

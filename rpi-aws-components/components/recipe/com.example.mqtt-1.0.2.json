@@ -1,7 +1,7 @@
 {
   "RecipeFormatVersion": "2020-01-25",
   "ComponentName": "com.example.mqtt",
-  "ComponentVersion": "1.0.1",
+  "ComponentVersion": "1.0.2",
   "ComponentDescription": "Comms to IoT core",
   "ComponentPublisher": "Me",
   "ComponentConfiguration": {
@@ -15,7 +15,7 @@
               "aws.greengrass#PublishToIoTCore"
             ],
             "resources": [
-              "falldetection/test"
+              "falldetection"
             ]
           }
         }
@@ -30,7 +30,7 @@
       "Lifecycle": {
         "Install": {
           "RequiresPrivilege": true,
-          "script": "python3 -m pip install --user awsiotsdk"
+          "script": "python3 -m pip install --user paho-mqtt"
         },
         "Run": {
           "RequiresPrivilege": true,

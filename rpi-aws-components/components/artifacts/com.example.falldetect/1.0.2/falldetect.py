@@ -6,8 +6,6 @@ import logging
 import math
 # import time
 import json
-
-import json
 # import numpy as np
 # import joblib
 import warnings
