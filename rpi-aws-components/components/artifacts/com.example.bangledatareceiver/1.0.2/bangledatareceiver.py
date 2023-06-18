@@ -110,8 +110,9 @@ def consumer():
         try:
             requests.post(url, json=data, headers=headers)
         except Exception as e:
-            print('Error in sending data to server')
             print(e)
+            print('Error in sending data to server, retry in 3 seconds...')
+            time.sleep(3)
         # print(response.content.decode('utf-8'))
 
         # Mark the message as consumed
