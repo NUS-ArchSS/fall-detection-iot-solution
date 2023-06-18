@@ -107,9 +107,11 @@ def consumer():
             "ctime": 12348888
         }
         # print(data)
-
-        response = requests.post(url, json=data, headers=headers)
-
+        try:
+            requests.post(url, json=data, headers=headers)
+        except Exception as e:
+            print('Error in sending data to server')
+            print(e)
         # print(response.content.decode('utf-8'))
 
         # Mark the message as consumed

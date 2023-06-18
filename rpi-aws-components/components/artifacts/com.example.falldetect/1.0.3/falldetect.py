@@ -41,26 +41,28 @@ def do_fall_detection(input_json):
 
     try:
         input_dict = json.loads(input_json)
+
+        # Access the values of Acc_X, Acc_Y, and Acc_Z
+        Acc_X = input_dict['Acc_X']
+        Acc_Y = input_dict['Acc_Y']
+        Acc_Z = input_dict['Acc_Z']
+
+        x, y, z = float(Acc_X), float(Acc_Y), float(Acc_Z)
+        magnitude = math.sqrt(x**2 + y**2 + z**2)
+        is_fall = magnitude > 1.5
+
+        if is_fall:
+            # print("Fall detected:", is_fall)
+            print("###############################")
+            print("FALL DETECT: YES ***")
+            print("###############################")
+            return True
+        else:
+            # print("FALL DETECT: NO ***")
+            return False
     except Exception as e:
         print("Error decoding JSON:", str(e))
-    # Access the values of Acc_X, Acc_Y, and Acc_Z
-    Acc_X = input_dict['Acc_X']
-    Acc_Y = input_dict['Acc_Y']
-    Acc_Z = input_dict['Acc_Z']
-
-    x, y, z = float(Acc_X), float(Acc_Y), float(Acc_Z)
-    magnitude = math.sqrt(x**2 + y**2 + z**2)
-    is_fall = magnitude > 1.5
-
-    if is_fall:
-        # print("Fall detected:", is_fall)
-        print("###############################")
-        print("FALL DETECT: YES ***")
-        print("###############################")
-        return True
-    else:
-        # print("FALL DETECT: NO ***")
-        return False
+        print(f"Input JSON: {input_json}")
 
 
 """
@@ -100,5 +102,4 @@ def post_request():
 
 
 if __name__ == '__main__':
-    # for debug only (should use host='127.0.0.1'). Should not open to public usage due to security concern
     app.run(host="127.0.0.1", port=5001)
