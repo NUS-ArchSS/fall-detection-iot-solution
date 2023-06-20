@@ -129,6 +129,29 @@ After installing and configuring AWS Greengrass on RPi
 
       Note: Remember to modify the recipeDir, artifactDir, component name, and version number in the commands with the correct values.
 
+3. Error: "[org.bluez.Error.Failed\] Software caused connection abort" or other bluetooth related error
+
+   This issue seems to occur more frequently on RPi and has not been encountered when running the Python apps on a Mac. Although a viable solution has not been found yet, you can try the following steps:
+
+   1. Delete the bangledatareceiver component:
+
+      ```
+      ### Remove a component:
+      sudo /greengrass/v2/bin/greengrass-cli deployment create --remove "com.example.bangledatareceiver"
+      ```
+
+   2. Long-press the side button on the bangle watch to restart it.
+
+   3. Reboot the RPi.
+
+   4. Redeploy the bangledatareceiver component:
+
+      ```
+      ### Create a deployment:
+      ### Remember to change recipeDir, artifactDir, component name, and version accordingly.
+      sudo /greengrass/v2/bin/greengrass-cli deployment create --recipeDir ~/Desktop/fall-detection-iot-solution/rpi-aws-components/components/recipe/ --artifactDir ~/Desktop/fall-detection-iot-solution/rpi-aws-components/components/artifacts/ --merge "com.example.bangledatareceiver=1.0.2"
+      ```
+
 # When all else fails
 
 [Create an Issue](https://github.com/NUS-ArchSS/fall-detection-iot-solution/issues/new) 
